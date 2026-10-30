@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06c755">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="回訪小幫手">
+  <title>回訪小幫手</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>回訪小幫手<span class="sync" id="sync" onclick="openSetup()"></span></header>
+  <nav>
+    <button id="tab-today" class="on" onclick="show('today')">今日待辦</button>
+    <button id="tab-wait" onclick="show('wait')">等待回覆中</button>
+    <button id="tab-all" onclick="show('all')">總名單</button>
+  </nav>
+
+  <main>
+    <section id="today"><div class="empty">載入中…</div></section>
+
+    <section id="wait" style="display:none"><div class="empty">載入中…</div></section>
+
+    <section id="all" style="display:none"><div class="empty">載入中…</div></section>
+
+    <section id="add" class="sheet" style="display:none" onclick="if (event.target === this) closeAdd()">
+      <form class="card" onsubmit="submitPerson(event)">
+        <div class="row"><div class="name">新增名單</div><button type="button" class="close" onclick="closeAdd()">✕</button></div>
+        <label>LINE 名稱 *</label>
+        <input name="name" required>
+        <label>身份</label>
+        <select name="identity" id="identitySelect"></select>
+        <label>學校</label>
+        <input name="school">
+        <label>系級</label>
+        <input name="dept" placeholder="例如：資工二">
+        <label>認識時間</label>
+        <input name="metDate" type="date" id="metDate">
+        <label>狀態</label>
+        <select name="status" id="statusSelect"></select>
+        <label>簡單備註</label>
+        <textarea name="note" placeholder="在哪認識、興趣、聊過什麼…"></textarea>
+        <button class="btn" type="submit">加入名單</button>
+      </form>
+    </section>
+
+    <section id="msg" class="sheet" style="display:none" onclick="if (event.target === this) closeMsg()">
+      <form class="card" onsubmit="sendLine(event)">
+        <div class="row"><div class="name" id="msgTitle">傳 LINE</div><button type="button" class="close" onclick="closeMsg()">✕</button></div>
+        <div class="hintbox" id="msgHint" style="display:none"></div>
+        <label>訊息內容</label>
+        <textarea id="msgText" style="min-height:120px"></textarea>
+        <button class="btn" type="submit">打開 LINE 傳送</button>
+      </form>
+    </section>
+
+    <section id="setup" class="sheet" style="display:none">
+      <form class="card" onsubmit="saveSetup(event)">
+        <div class="row"><div class="name">連接試算表</div><button type="button" class="close" id="setupClose" onclick="closeSetup()">✕</button></div>
+        <p class="meta">第一次使用要填一次，之後這支手機會記住。兩個都在 Apps Script 裡找得到，見 README 的安裝步驟。</p>
+        <label>Apps Script 網址</label>
+        <input name="api" id="cfgApi" required placeholder="https://script.google.com/macros/s/…/exec">
+        <label>App 密碼</label>
+        <input name="token" id="cfgToken" required autocomplete="off">
+        <button class="btn" type="submit">連接</button>
+      </form>
+    </section>
+  </main>
+  <button id="fab" onclick="openAdd()" aria-label="新增名單">＋</button>
+  <div id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
